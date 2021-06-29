@@ -157,11 +157,9 @@ class Network(object):
         # early stopping functionality:
         best_accuracy=1
 
-        training_data = list(training_data)
         n = len(training_data)
 
         if evaluation_data:
-            evaluation_data = list(evaluation_data)
             n_data = len(evaluation_data)
 
         # early stopping functionality:

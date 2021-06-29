@@ -55,11 +55,9 @@ class Network(object):
         epoch, and partial progress printed out.  This is useful for
         tracking progress, but slows things down substantially."""
 
-        training_data = list(training_data)
         n = len(training_data)
 
         if test_data:
-            test_data = list(test_data)
             n_test = len(test_data)
 
         for j in range(epochs):
