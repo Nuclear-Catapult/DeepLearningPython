@@ -21,7 +21,7 @@ import numpy as np
 
 class Network(object):
 
-    def __init__(self, sizes):
+    def __init__(self):
         """The list ``sizes`` contains the number of neurons in the
         respective layers of the network.  For example, if the list
         was [2, 3, 1] then it would be a three-layer network, with the
@@ -32,11 +32,10 @@ class Network(object):
         layer is assumed to be an input layer, and by convention we
         won't set any biases for those neurons, since biases are only
         ever used in computing the outputs from later layers."""
-        self.num_layers = len(sizes)
-        self.sizes = sizes
-        self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
-        self.weights = [np.random.randn(y, x)
-                        for x, y in zip(sizes[:-1], sizes[1:])]
+        self.num_layers = 3
+        self.sizes = [2, 2, 2]
+        self.biases = [np.array([[ 1.45722505],[-2.42273809]]), np.array([[ 0.23379489],[-0.13891067]])]
+        self.weights = [np.array([[-2.89789113,  0.05755303], [-0.27850331, -1.14365775]]),np.array([[-2.18112188, -0.20926775],[ 1.17804109, -0.4288509 ]])]
 
     def feedforward(self, a):
         """Return the output of the network if ``a`` is input."""
@@ -44,8 +43,7 @@ class Network(object):
             a = sigmoid(np.dot(w, a)+b)
         return a
 
-    def SGD(self, training_data, epochs, mini_batch_size, eta,
-            test_data=None):
+    def SGD(self, training_data, epochs, mini_batch_size, eta, test_data):
         """Train the neural network using mini-batch stochastic
         gradient descent.  The ``training_data`` is a list of tuples
         ``(x, y)`` representing the training inputs and the desired
@@ -57,8 +55,7 @@ class Network(object):
 
         n = len(training_data)
 
-        if test_data:
-            n_test = len(test_data)
+        n_test = len(test_data)
 
         for j in range(epochs):
             random.shuffle(training_data)
@@ -67,10 +64,12 @@ class Network(object):
                 for k in range(0, n, mini_batch_size)]
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
-            if test_data:
-                print("Epoch {} : {} / {}".format(j,self.evaluate(test_data),n_test))
-            else:
-                print("Epoch {} complete".format(j))
+            correct_count = self.evaluate(test_data)
+            print("Epoch {} : {} / {}".format(j, correct_count, n_test))
+            if correct_count == n_test:
+                print(self.biases)
+                print(self.weights)
+                return
 
     def update_mini_batch(self, mini_batch, eta):
         """Update the network's weights and biases by applying
@@ -128,8 +127,7 @@ class Network(object):
         network outputs the correct result. Note that the neural
         network's output is assumed to be the index of whichever
         neuron in the final layer has the highest activation."""
-        test_results = [(np.argmax(self.feedforward(x)), y)
-                        for (x, y) in test_data]
+        test_results = [(np.argmax(self.feedforward(x)), y) for (x, y) in test_data]
         return sum(int(x == y) for (x, y) in test_results)
 
     def cost_derivative(self, output_activations, y):
