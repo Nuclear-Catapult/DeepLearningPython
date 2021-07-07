@@ -17,43 +17,38 @@
 
 # ----------------------
 # - read the input data:
-'''
 import mnist_loader
 training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
-training_data = list(training_data)
-'''
 # ---------------------
 # - network.py example:
-#import network
+import network
 
-'''
 net = network.Network([784, 30, 10])
 net.SGD(training_data, 30, 10, 3.0, test_data=test_data)
-'''
 
 # ----------------------
 # - network2.py example:
-#import network2
+import network2
 
-'''
+
 net = network2.Network([784, 30, 10], cost=network2.CrossEntropyCost)
 #net.large_weight_initializer()
 net.SGD(training_data, 30, 10, 0.1, lmbda = 5.0,evaluation_data=validation_data,
     monitor_evaluation_accuracy=True)
-'''
+
 
 # chapter 3 - Overfitting example - too many epochs of learning applied on small (1k samples) amount od data.
 # Overfitting is treating noise as a signal.
-'''
+
 net = network2.Network([784, 30, 10], cost=network2.CrossEntropyCost)
 net.large_weight_initializer()
 net.SGD(training_data[:1000], 400, 10, 0.5, evaluation_data=test_data,
     monitor_evaluation_accuracy=True,
     monitor_training_cost=True)
-'''
+
 
 # chapter 3 - Regularization (weight decay) example 1 (only 1000 of training data and 30 hidden neurons)
-'''
+
 net = network2.Network([784, 30, 10], cost=network2.CrossEntropyCost)
 net.large_weight_initializer()
 net.SGD(training_data[:1000], 400, 10, 0.5,
@@ -63,10 +58,10 @@ net.SGD(training_data[:1000], 400, 10, 0.5,
     monitor_evaluation_accuracy=True,
     monitor_training_cost=True,
     monitor_training_accuracy=True)
-'''
+
 
 # chapter 3 - Early stopping implemented
-'''
+
 net = network2.Network([784, 30, 10], cost=network2.CrossEntropyCost)
 net.SGD(training_data[:1000], 30, 10, 0.5,
     lmbda=5.0,
@@ -74,17 +69,17 @@ net.SGD(training_data[:1000], 30, 10, 0.5,
     monitor_evaluation_accuracy=True,
     monitor_training_cost=True,
     early_stopping_n=10)
-'''
+
 
 # chapter 4 - The vanishing gradient problem - deep networks are hard to train with simple SGD algorithm
 # this network learns much slower than a shallow one.
-'''
+
 net = network2.Network([784, 30, 30, 30, 30, 10], cost=network2.CrossEntropyCost)
 net.SGD(training_data, 30, 10, 0.1,
     lmbda=5.0,
     evaluation_data=validation_data,
     monitor_evaluation_accuracy=True)
-'''
+
 
 
 # ----------------------
@@ -162,15 +157,15 @@ training_data, validation_data, test_data = network3.load_data_shared()
 mini_batch_size = 10
 
 # chapter 6 - shallow architecture using just a single hidden layer, containing 100 hidden neurons.
-'''
+
 net = Network([
     FullyConnectedLayer(n_in=784, n_out=100),
     SoftmaxLayer(n_in=100, n_out=10)], mini_batch_size)
 net.SGD(training_data, 60, mini_batch_size, 0.1, validation_data, test_data)
-'''
+
 
 # chapter 6 - 5x5 local receptive fields, 20 feature maps, max-pooling layer 2x2
-'''
+
 net = Network([
     ConvPoolLayer(image_shape=(mini_batch_size, 1, 28, 28),
                   filter_shape=(20, 1, 5, 5),
@@ -178,10 +173,10 @@ net = Network([
     FullyConnectedLayer(n_in=20*12*12, n_out=100),
     SoftmaxLayer(n_in=100, n_out=10)], mini_batch_size)
 net.SGD(training_data, 60, mini_batch_size, 0.1, validation_data, test_data)
-'''
+
 
 # chapter 6 - inserting a second convolutional-pooling layer to the previous example => better accuracy
-'''
+
 net = Network([
     ConvPoolLayer(image_shape=(mini_batch_size, 1, 28, 28),
                   filter_shape=(20, 1, 5, 5),
@@ -192,7 +187,7 @@ net = Network([
     FullyConnectedLayer(n_in=40*4*4, n_out=100),
     SoftmaxLayer(n_in=100, n_out=10)], mini_batch_size)
 net.SGD(training_data, 60, mini_batch_size, 0.1, validation_data, test_data)
-'''
+
 
 # chapter 6 -  rectified linear units and some l2 regularization (lmbda=0.1) => even better accuracy
 from network3 import ReLU
