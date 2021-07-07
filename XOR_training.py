@@ -16,4 +16,4 @@ test_data = [
 ]
 
 net = network.Network()
-net.SGD(training_data, 10000, 4, 0.4, test_data=test_data)
+net.SGD(training_data, 10000, 4, 10, test_data=test_data)
